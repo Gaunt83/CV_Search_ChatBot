@@ -24,13 +24,18 @@ def load_cvs(file_path):
                     if not shape.has_text_frame:
                         continue
                     for paragraph in shape.text_frame.paragraphs:
+                        runs = []
                         for run in paragraph.runs:
-                            text_runs.append(run.text)
+                            runs.append(run.text)
+
+                        text_runs.append(" ".join(runs))
+
+            text_runs = list(filter(lambda x: x != "", text_runs))
 
             file_data.append({
                 "text": text_runs,
                 "file_name": file,
-                "candidate_name": f"{text_runs[0]} {text_runs[1]}"
+                "candidate_name": text_runs[0]
             })
 
             logging.info(f"file {file} opened succesfully")
