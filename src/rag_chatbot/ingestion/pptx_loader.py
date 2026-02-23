@@ -28,9 +28,9 @@ def load_cvs(file_path):
                         for run in paragraph.runs:
                             runs.append(run.text)
 
-                        text_runs.append(" ".join(runs))
+                        text_runs.append("".join(runs))
 
-            text_runs = list(filter(lambda x: x != "", text_runs))
+            # text_runs = list(filter(lambda x: x != "", text_runs))
 
             file_data.append({
                 "text": text_runs,

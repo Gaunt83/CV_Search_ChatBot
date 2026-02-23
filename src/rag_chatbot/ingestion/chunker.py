@@ -6,14 +6,8 @@ from operator import concat
 from functools import reduce
 
 
-def get_chunks(cv):
+def get_chunks(cv, chunk_size=500, chunk_overlap=100):
     load_dotenv()
-
-    try:
-        chunk_size = int(os.getenv("CHUNK_SIZE"))
-        chunk_overlap = int(os.getenv("CHUNK_OVERLAP"))
-    except Exception as ex:
-        logging.warning(ex)
 
     #TODO: implement propper exception.
     if chunk_overlap > chunk_size:
@@ -33,5 +27,7 @@ def get_chunks(cv):
     chunk_num = len(chunks)
     logging.info(f"number of chunks for cv {cv["file_name"]} is: {chunk_num}")
 
-    return chunks
+    chunked_string = encoding.decode_batch(chunks)
+
+    return chunked_string
 
