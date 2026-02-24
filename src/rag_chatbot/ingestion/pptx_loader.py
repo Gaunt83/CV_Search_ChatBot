@@ -2,6 +2,8 @@ from pptx import Presentation
 import os
 import logging
 
+logger = logging.getLogger(__name__)
+
 
 def load_cvs(file_path):
     pptx_files = []
@@ -9,13 +11,13 @@ def load_cvs(file_path):
     try:
         pptx_files = list(filter(lambda x: x.endswith(".pptx") , os.listdir(file_path)))
     except Exception:
-        logging.warning("could not open path")
+        logger.warning("could not open path")
 
     file_data = []
 
     for file in pptx_files:
         try:
-            logging.info(f"opening file {file}")
+            logger.info(f"opening file {file}")
             presentation = Presentation(file_path + file)
             text_runs = []
 
@@ -38,9 +40,9 @@ def load_cvs(file_path):
                 "candidate_name": f"{text_runs[0]} {text_runs[1]}"
             })
 
-            logging.info(f"file {file} opened succesfully")
-            logging.info(f"characters in the file {len("".join(text_runs))}")
+            logger.info(f"file {file} opened succesfully")
+            logger.info(f"characters in the file {len("".join(text_runs))}")
         except Exception as ex:
-            logging.warning(ex)
+            logger.warning(ex)
 
     return file_data

@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from operator import concat
 from functools import reduce
 
+logger = logging.getLogger(__name__)
 
 def get_chunks(cv, chunk_size=500, chunk_overlap=100):
     load_dotenv()
@@ -24,7 +25,7 @@ def get_chunks(cv, chunk_size=500, chunk_overlap=100):
         l_limit = r_limit - chunk_overlap
         
     chunk_num = len(chunks)
-    logging.info(f"number of chunks for cv {cv["file_name"]} is: {chunk_num}")
+    logger.info(f"number of chunks for cv {cv["file_name"]} is: {chunk_num}")
 
     chunked_string = encoding.decode_batch(chunks)
 

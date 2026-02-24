@@ -13,6 +13,7 @@ collection_location = os.getenv("CHROMA_DIR")
 model_name = os.getenv("EMBEDDING_MODEL")
 chroma_client = chromadb.PersistentClient(path=collection_location)
 collection_name = f"cv_embeddings_{model_name}"
+logger = logging.getLogger(__name__)
 
 def initialise_collection():
     collection = chroma_client.get_or_create_collection(collection_name)
@@ -64,5 +65,5 @@ def reset_database():
         chroma_client.delete_collection(collection_name)
         _ = initialise_collection()
     except Exception as ex:
-        logging.warning(ex)
+        logger.warning(ex)
     return

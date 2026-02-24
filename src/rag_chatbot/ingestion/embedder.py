@@ -4,8 +4,9 @@ import logging
 from ollama._types import ResponseError
 from dotenv import load_dotenv
 from rag_chatbot.ingestion import chunker
-
 import time
+
+logger = logging.getLogger(__name__)
 
 
 def get_embeddings(cv, model="text-embedding-3-small"):
@@ -15,12 +16,12 @@ def get_embeddings(cv, model="text-embedding-3-small"):
         chunk_overlap = int(os.getenv("CHUNK_OVERLAP"))
         model = os.getenv("EMBEDDING_MODEL")
     except TypeError as ex:
-        logging.warning(ex)
+        logger.warning(ex)
 
     try:
         chunks = chunker.get_chunks(cv, chunk_size, chunk_overlap)
     except UnboundLocalError as ex:
-        logging.warning(ex)
+        logger.warning(ex)
 
     embeddings = {}
     try:
@@ -32,11 +33,11 @@ def get_embeddings(cv, model="text-embedding-3-small"):
         })
         end = time.time()
         elapsed = end - start
-        logging.info(f"embedding cv {cv["file_name"]} with model {model} took: {elapsed:.4f}s")
+        logger.info(f"embedding cv {cv["file_name"]} with model {model} took: {elapsed:.4f}s")
     except ResponseError as ex:
-        logging.warning("Encountered issue getting embedding model:", ex)
+        logger.warning("Encountered issue getting embedding model:", ex)
     except Exception as ex:
-        logging.warning(ex)
+        logger.warning(ex)
 
     return embeddings
 

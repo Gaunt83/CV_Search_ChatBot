@@ -1,5 +1,8 @@
 .env
+
 *.pptx
+*.log
+
 __pycache__
 
 #DIR
