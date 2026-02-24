@@ -30,12 +30,12 @@ def load_cvs(file_path):
 
                         text_runs.append("".join(runs))
 
-            # text_runs = list(filter(lambda x: x != "", text_runs))
+            text_runs = list(filter(lambda x: x != "", text_runs))
 
             file_data.append({
                 "text": text_runs,
                 "file_name": file,
-                "candidate_name": text_runs[0]
+                "candidate_name": f"{text_runs[0]} {text_runs[1]}"
             })
 
             logging.info(f"file {file} opened succesfully")

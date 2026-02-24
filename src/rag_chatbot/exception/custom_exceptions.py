@@ -1,0 +1,2 @@
+class ArgumentLengthException(Exception):
+    pass
