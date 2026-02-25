@@ -1,6 +1,7 @@
 import sys
 import logging
 import time
+from rag_chatbot.ingestion.pptx_loader import load_cvs
 from rag_chatbot.ingestion.chromadb_collection import update_embeddings
 
 
@@ -18,7 +19,8 @@ def main():
 
     try:
         start_time = time.time()
-        update_embeddings()
+        cvs = load_cvs("data/cvs/")
+        update_embeddings(cvs)
         end_time = time.time()
     except Exception:
         logger.warning("An error occured during updating db...")

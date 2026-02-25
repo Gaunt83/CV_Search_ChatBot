@@ -1,7 +1,7 @@
 import chromadb
 import os
 from dotenv import load_dotenv
-from rag_chatbot.ingestion import embedder, pptx_loader
+from rag_chatbot.ingestion import embedder
 from rag_chatbot.exception.custom_exceptions import ArgumentLengthException
 import time
 import hashlib
@@ -20,16 +20,22 @@ def initialise_collection():
     return collection
 
 
-def update_embeddings():
-    cvs = pptx_loader.load_cvs("data/cvs/")
+def update_embeddings(cvs):
     collection = initialise_collection()
 
     for cv in cvs:
-        cv_embedding = embedder.get_embeddings(cv)
-        chunks = cv_embedding["chunk"]
-        embeddings = cv_embedding["embedding"]["embeddings"]
+        text = cv["text"]
         file_name = cv["file_name"]
         candidate_name = cv["candidate_name"]
+
+        start_time = time.time()
+        cv_embedding = embedder.get_document_embeddings(text)
+        end_time = time.time()
+        logger.info(f"Embeddings for {file_name} created in {(end_time - start_time):.3f}s")
+
+        chunks = cv_embedding["chunk"]
+        embeddings = cv_embedding["embedding"]
+   
         if len(chunks) != len(embeddings):
             raise ArgumentLengthException("Chunk and Embedding length does not match...")
         
@@ -41,6 +47,7 @@ def update_embeddings():
             # ensure id stay consistent if nothing has changed
             # ensures no duplicate entries
             ids.append(hashlib.md5(id.encode()).hexdigest())
+
             time_now = time.time()
             metadatas.append(
                 {
